@@ -176,3 +176,100 @@ c. Karena setiap akan menamai file dilakukan perulangan dengan menggunakan kondi
 
 d. Supaya isi password tidak akan sama, maka diambil karakter sesuai ketentuan dari /dev/urandom seperti ini:
 ``cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1``
+
+
+## 4. Enkripsi Back Up Syslog
+#### soal4_e.sh
+```
+hour=`date +"%H"`
+filename=`date +"%H:%M %d-%m-%Y"`
+
+lowercase="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+uppercase="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+cat /var/log/syslog | tr "${lowercase:0:26}${uppercase:0:26}" "${lowercase:$hour:26}${uppercase:$hour:26}" > "/home/paramastri/sisop19/modul1/nomor4_enkripsi/$filename"
+```
+#### soal4_d.sh
+```
+echo "Enter the file: "
+read times
+hour=${times:0:2}
+
+lowercase="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+uppercase="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
+awk '{print}' "/home/paramastri/sisop19/modul1/nomor4_enkripsi/$times" | tr "${lowercase:$hour:26}${uppercase:$hour:26}" "${lowercase:0:26}${uppercase:0:26}" | awk '{print}' > "/home/paramastri/sisop19/modul1/nomor4_dekripsi/$times"
+```
+#### crontab -e
+```
+@hourly /bin/bash /home/paramastri/sisop19/modul1/soal4_e.sh
+```
+#### Penjelasan
+##### Soal:
+Lakukan backup file syslog setiap jam dengan format nama file “jam:menit tanggal-bulan-tahun”. Isi dari file backup terenkripsi dengan konversi huruf (string manipulation) yang disesuaikan dengan jam dilakukannya backup misalkan sebagai berikut:
+
+a. Huruf b adalah alfabet kedua, sedangkan saat ini waktu menunjukkan pukul 12, sehingga huruf b diganti dengan huruf alfabet yang memiliki urutan ke 12+2 = 14.
+
+b. Hasilnya huruf b menjadi huruf n karena huruf n adalah huruf ke empat belas, dan seterusnya.
+
+c. setelah huruf z akan kembali ke huruf a.
+
+d. Backup file syslog setiap jam.
+
+e. dan buatkan juga bash script untuk dekripsinya.
+
+##### Solusi
+Supaya karakter tertentu dapat diterjemahkan dengan urutan (tanggal file terbuat) + (urutan alfabet), dibuat sintaks seperti dibawah ini:
+`` hour=`date +"%H"` ``
+
+Ketika setiap huruf sudah diterjemahkan, urutan alfabet pun ikut tergeser, sehingga sintaks ‘tr’ atau translate ditulis seperti ini: 
+`` tr "${lowercase:0:26}${uppercase:0:26}"``
+``"${lowercase:$hour:26}${uppercase:$hour:26}" ``
+
+Kami menuliskan urutan alfabet sebanyak 2 kali supaya alfabet melakukan translate dan bergeser dengan tepat. Kemungkinan terburuk yang dapat terjadi adalah ketika file terbut pada pukul 23. Sehingga tentu huruf z akan menjadi urutan ke 23 + 26 = 49. Hal ini akan ter-cover karena jumlah alfabet yang saya tuliskan 2 kali menghasilkan 52 karakter yang dimana menanggung urutan huruf z yang menjadi ke-49 tadi.
+`` lowercase="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+uppercase="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ" ``
+
+Untuk melakukan back up file syslog setiap jam, dituliskan pada pengaturan crontab sebagai berikut:
+`` @hourly /bin/bash /home/paramastri/sisop19/modul1/soal4_e.sh ``
+
+Script dekripsi telah kami buat dan disimpan pada shell script ‘soal4_d.sh’
+
+## 5. Simpan Record Syslog
+#### soal5.sh
+```
+awk '/cron/ || /CRON/,!/sudo/' /var/log/syslog | awk 'NF < 13' >> /home/paramastri/modul1/syslogno5.log
+```
+#### crontab -e
+```
+2-30/6 * * * * /home/paramastri/sisop19/modul1/soal5.sh
+```
+
+#### Penjelasan
+##### Soal:
+
+Buatlah sebuah script bash untuk menyimpan record dalam syslog yang memenuhi kriteria berikut:
+
+a. Tidak mengandung string “sudo”, tetapi mengandung string “cron”, serta buatlah pencarian stringnya tidak bersifat case sensitive, sehingga huruf kapital atau tidak, tidak menjadi masalah.
+
+b. Jumlah field (number of field) pada baris tersebut berjumlah kurang dari 13.
+
+c. Masukkan record tadi ke dalam file logs yang berada pada direktori /home/[user]/modul1.
+ 
+d. Jalankan script tadi setiap 6 menit dari menit ke 2 hingga 30, contoh 13:02, 13:08, 13:14, dst.
+
+
+##### Solusi:
+
+a. Untuk memfilter output yang dihasilkan supaya sesuai seperti yang diminta, kami menggunakan sintaks seperti di bawah ini:
+``awk '/cron/ || /CRON/,!/sudo/' /var/log/syslog``
+
+Yang artinya mengambil string ‘cron’ dan ‘CRON’ (karena tidak case sensitive) dan tidak mengandung string ‘sudo’ dengan perintah ``‘!/sudo/’ yang difilter dari data pada /var/log/syslog``
+
+b. Untuk menentukan inputnya adalah jumlah field yang tidak kurang dari 13, kami menuliskan sintaks NF: number of field < 13 yang dituliskan seperti ini:
+``| awk 'NF < 13'``
+
+c. Memasukkan record ke dalam file ekstensi .log menggunakan penulisan path seperti dibawah ini dengan ‘>>’ yang artinya akan dilakukan append pada isi file tersebut:
+``>> /home/paramastri/modul1/syslogno5.log``
+
+d. Untuk menjalankan script sesuai ketentuan waktu yang tersedia, dilakukan pengaturan pada crontab -e dengan sintaks seperti ini:
+``2-30/6 * * * * /home/paramastri/sisop19/modul1/soal5.sh``
