@@ -93,7 +93,7 @@ echo -e "\nOutdoor Protection:"
 awk -F "," '{if($1 == "United States" && $7 == '2012' && $4 == "Outdoor Protection") iter[$6]+=$10} END {for(hasil in iter) print iter[hasil], hasil}' WA_Sales_Products_2012-14.csv | sort -rn | awk 'NR <=3 {print $2, $3, $4}'
 ```
 
-#### Penjelasan:
+#### Penjelasan
 ##### Soal: 
 
 Anda merupakan pegawai magang pada sebuah perusahaan retail, dan anda diminta
@@ -130,4 +130,49 @@ c. Pada Soal point B output product line nya adalah "Personal Accessories, Campi
 
 serta mengambil 3 kolom terakhir, dimana itu adalah nama record dari Product yang memiliki maksimal 3 kata ``(“ | awk 'NR <=3 {print $2, $3, $4} “)``
 
+## 3. Password
+#### soal3.sh
+```
+#!/bin/bash
+iter=1
+nomor=1
+while [ $iter -ne 0 ]
+do
+if [[ -f /home/paramastri/sisop19/modul1/nomor3/password$nomor.txt ]] ; then
+    nomor=$((nomor + 1))
+    else
+cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1 > /home/paramastri/sisop19/modul1/nomor3/password$nomor.txt
+iter=0
+fi
+done
+```
 
+#### Penjelasan
+##### Soal: 
+
+Buatlah sebuah script bash yang dapat menghasilkan password secara acak
+sebanyak 12 karakter yang terdapat huruf besar, huruf kecil, dan angka. Password
+acak tersebut disimpan pada file berekstensi .txt dengan ketentuan pemberian nama
+sebagai berikut:
+
+a. Jika tidak ditemukan file password1.txt maka password acak tersebut disimpan pada file bernama password1.txt
+
+b. Jika file password1.txt sudah ada maka password acak baru akan disimpan pada file bernama password2.txt dan begitu seterusnya.
+
+c. Urutan nama file tidak boleh ada yang terlewatkan meski filenya dihapus.
+
+d. Password yang dihasilkan tidak boleh sama.
+
+##### Solusi:
+
+a. Ketika dalam kondisi tidak ditemukan password(nomor).txt, maka penyimpanan pada file dilakukan dengan menuliskan tujuan penyimpanannya dengan path seperti ini: 
+``/home/paramastri/sisop19/modul1/nomor3/password$nomor.txt``
+
+b. Lalu apabila nomor file password sudah ada pada file .txt, maka password acak yang baru akan dibuat dengan diberi nomor +1 dari nomor sebelumnya secara otomatis:
+``then nomor=$((nomor + 1))``
+
+c. Karena setiap akan menamai file dilakukan perulangan dengan menggunakan kondisi:
+``if [[ -f /home/paramastri/sisop19/modul1/nomor3/password$nomor.txt ]]``. Maka nomor file password yang sudah ada tidak akan dibuat lagi dan apabila urutannya terlewat atau terhapus sehingga belum ada, maka akan dibuat sesuai dengan urutan nomor file yang seharusnya.
+
+d. Supaya isi password tidak akan sama, maka diambil karakter sesuai ketentuan dari /dev/urandom seperti ini:
+``cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1``
