@@ -237,7 +237,7 @@ Script dekripsi telah kami buat dan disimpan pada shell script ‘soal4_d.sh’
 #### Syslog terdekripsi
 ![alt text](https://github.com/paramastri/SoalShift_modul1_F10/blob/master/no4_dekripsi.PNG)
 
-##### Syslog terenkripsi
+#### Syslog terenkripsi
 ![alt text](https://github.com/paramastri/SoalShift_modul1_F10/blob/master/no4_enkripsi.PNG)
 
 
