@@ -126,6 +126,8 @@ Output tadi di sorting ``(“ | sort -rn “)`` dan output diambil 2 kolom terak
 
 c. Pada soal poin B output yang keluar adalah Personal Accessories, Camping Equipment, Outdoor Protection. Dari 3 macem product ini kita cari penjualan tertingginya ``(“ awk -F “,” ‘{if ($1 ==“United States” && $7 ==’2012’ && ($4 == “Personal Accessories” || $4 == “Camping Equipment” || $4 == “Outdoor Proctection”)) iter[$6]+=$10}`` yang kemudian hasil tersebut diprint ``(“ END {for(hasil in iter) print iter[hasil],hasil}’WA_Sales_Products_2012-14.csv’ ”)``. Output tadi disorting ``(“ | sort -rn “)``  dan Output diambil 3 quantity teratas dari 3 product line kemudian di print hasilnya bersama jumlah kuantitynya ``(“ | awk 'NR<=3 {print $2,$3,$4}' “)``.
 
+![alt text](https://github.com/paramastri/SoalShift_modul1_F10/blob/master/no2.PNG)
+
 ## 3. Password
 #### soal3.sh
 ```
@@ -173,6 +175,8 @@ c. Karena setiap akan menamai file dilakukan perulangan dengan menggunakan kondi
 d. Supaya isi password tidak akan sama, maka diambil karakter sesuai ketentuan dari /dev/urandom seperti ini:
 ``cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 12 | head -n 1``
 
+
+![alt text](https://github.com/paramastri/SoalShift_modul1_F10/blob/master/no3.PNG)
 
 ## 4. Enkripsi Back Up Syslog
 #### soal4_e.sh
@@ -230,6 +234,13 @@ Untuk melakukan back up file syslog setiap jam, dituliskan pada pengaturan cront
 
 Script dekripsi telah kami buat dan disimpan pada shell script ‘soal4_d.sh’
 
+#### Syslog terdekripsi
+![alt text](https://github.com/paramastri/SoalShift_modul1_F10/blob/master/no4_dekripsi.PNG)
+
+##### Syslog terenkripsi
+![alt text](https://github.com/paramastri/SoalShift_modul1_F10/blob/master/no4_enkripsi.PNG)
+
+
 ## 5. Simpan Record Syslog
 #### soal5.sh
 ```
@@ -269,3 +280,5 @@ c. Memasukkan record ke dalam file ekstensi .log menggunakan penulisan path sepe
 
 d. Untuk menjalankan script sesuai ketentuan waktu yang tersedia, dilakukan pengaturan pada crontab -e dengan sintaks seperti ini:
 ``2-30/6 * * * * /home/paramastri/sisop19/modul1/soal5.sh``
+
+![alt text](https://github.com/paramastri/SoalShift_modul1_F10/blob/master/no5.PNG)
