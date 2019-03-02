@@ -85,12 +85,8 @@ awk -F  "," '{if($1 == "United States" && $7 == '2012') iter[$4]+=$10} END {for(
 echo -e "\nc)"
 
 #(c)
-echo -e "Personal Accessories:"
-awk -F "," '{if($1 == "United States" && $7 == '2012' && $4 == "Personal Accessories") iter[$6]+=$10} END {for(hasil in iter) print iter[hasil], hasil}' WA_Sales_Products_2012-14.csv | sort -rn | awk 'NR <=3 {print $2, $3, $4}'
-echo -e "\nCamping Equipment:"
-awk -F "," '{if($1 == "United States" && $7 == '2012' && $4 == "Camping Equipment") iter[$6]+=$10} END {for(hasil in iter) print iter[hasil], hasil}' WA_Sales_Products_2012-14.csv | sort -rn | awk 'NR <=3 {print $2, $3, $4}'
-echo -e "\nOutdoor Protection:"
-awk -F "," '{if($1 == "United States" && $7 == '2012' && $4 == "Outdoor Protection") iter[$6]+=$10} END {for(hasil in iter) print iter[hasil], hasil}' WA_Sales_Products_2012-14.csv | sort -rn | awk 'NR <=3 {print $2, $3, $4}'
+#(c)
+awk -F "," '{if($1 == "United States" && $7 == '2012' && ($4 == "Personal Accessories" || $4 == “Camping Equipment” || $4 == “Outdoor Protection” )) iter[$6]+=$10} END {for(hasil in iter) print iter[hasil], hasil}' WA_Sales_Products_2012-14.csv | sort -rn | awk 'NR <=3 {print $2, $3, $4}'
 ```
 
 #### Penjelasan
@@ -126,9 +122,7 @@ Yang kemudian hasil tersebut diprint
 
 Output tadi di sorting ``(“ | sort -rn “)`` dan output diambil 2 kolom terakhir yaitu kolom 2 dan 3 yang terdiri dari 2 kata product line dan diambil 3 kuantity teratas ``(“ | awk 'NR<=3 {print $2,$3}' “)``
 
-c. Pada Soal point B output product line nya adalah "Personal Accessories, Camping Equipment, dan Outdoor Protection” jadi mengunakan codingan yg mirip dengan penambahan kondisi pada ``if (“ awk -F "," '{if($1 == "United States" && $7 == '2012' && $4 == "Personal Accessories") iter[$6]+=$10} “)`` 
-
-serta mengambil 3 kolom terakhir, dimana itu adalah nama record dari Product yang memiliki maksimal 3 kata ``(“ | awk 'NR <=3 {print $2, $3, $4} “)``
+c. Pada soal poin B output yang keluar adalah Personal Accessories, Camping Equipment, Outdoor Protection. Dari 3 macem product ini kita cari penjualan tertingginya ``(“ awk -F “,” ‘{if ($1 ==“United States” && $7 ==’2012’ && ($4 == “Personal Accessories” || $4 == “Camping Equipment” || $4 == “Outdoor Proctection”)) iter[$6]+=$10}`` yang kemudian hasil tersebut diprint ``(“ END {for(hasil in iter) print iter[hasil],hasil}’WA_Sales_Products_2012-14.csv’ ”)``. Output tadi disorting ``(“ | sort -rn “)``  dan Output diambil 3 quantity teratas dari 3 product line kemudian di print hasilnya bersama jumlah kuantitynya ``(“ | awk 'NR<=3 {print $2,$3,$4}' “)``.
 
 ## 3. Password
 #### soal3.sh
