@@ -66,6 +66,8 @@ Script tadi dijalankan dalam crontab pada pukul 14:14 pada tanggal 14 Februari
 atau hari jumat pada bulan Februari
 ``(“14 14 * 2 5 /bin/bash /home/paramastri/sisop19/modul1/soal1.sh”)``
 
+![alt text](https://github.com/paramastri/SoalShift_modul1_F10/blob/master/no1.PNG)
+
 
 ## 2. Filter Data dengan AWK
 #### soal2.sh
